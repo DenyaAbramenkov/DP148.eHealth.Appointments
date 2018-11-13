@@ -10,8 +10,8 @@ using BusinessLogicLayer.Services;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.EntityFrameworkCore;
 using DataAccessLayer.Repository;
-using DataAccessLayer.Models;
-using DataAccessLayer;
+using DataAccessLayer.Entityes;
+using DataAccessLayer.AppointmentContext;
 
 namespace AppointmentsAPI
 {
@@ -36,9 +36,10 @@ namespace AppointmentsAPI
                     Description = "Appointments",
                 });
             });
-            services.AddDbContext<AppointmentContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IGenericRepository<Appointment>, GenericRepository<Appointment>>();
             services.AddTransient<IAppointmentService, AppointmentService>();
+            string connection = @"Data Source=DESKTOP-689S6T3\SERVER;Initial Catalog=EHospital;Integrated Security=True";
+            services.AddDbContext<EHospitalContext>(options => options.UseSqlServer(connection));
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

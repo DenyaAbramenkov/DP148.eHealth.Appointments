@@ -4,5 +4,51 @@
         <name>AppointmentsAPI</name>
     </assembly>
     <members>
+        <member name="T:AppointmentsAPI.Controllers.AppointmentsController">
+            <summary>
+            Contoller for Appointments Query.
+            </summary>
+        </member>
+        <member name="F:AppointmentsAPI.Controllers.AppointmentsController._service">
+            <summary>
+            Service for Appointments.
+            </summary>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.#ctor(BusinessLogicLayer.Services.IAppointmentService)">
+            <summary>
+            Initializes a new instance of the <see cref="M:AppointmentsAPI.Controllers.AppointmentsController.#ctor(BusinessLogicLayer.Services.IAppointmentService)"/> class.
+            </summary>
+            <param name="service">Service.</param>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.Get">
+            <summary>
+            Get all Appointments
+            </summary>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.Get(System.Int32)">
+            <summary>
+            Get Appointment by Id.
+            </summary>
+            <param name="id">Appointment's Id.</param>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.Create(DataAccessLayer.Entityes.Appointment)">
+            <summary>
+            Create new Appointment.
+            </summary>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.Update(System.Int32,DataAccessLayer.Entityes.Appointment)">
+            <summary>
+            Update Appointment by Id.
+            </summary>
+            <param name="id">Appointment's Id.</param>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.Delete(System.Int32)">
+            <summary>
+            Delete Appointment's By Id.
+            </summary>
+            <param name="id"></param>
+        </member>
     </members>
 </doc>
