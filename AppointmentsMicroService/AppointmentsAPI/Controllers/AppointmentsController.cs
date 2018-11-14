@@ -35,7 +35,7 @@ namespace AppointmentsAPI.Controllers
         /// </summary>
         /// <returns>Result of Http request.</returns>
         [HttpGet]
-        public IActionResult Get()
+        public IActionResult GetAllAppointment()
         {
             var appointments = _service.GetAllAppointments();
             if (appointments.Count() == 0)
@@ -51,7 +51,7 @@ namespace AppointmentsAPI.Controllers
         /// <param name="id">Appointment's Id.</param>
         /// <returns>Result of Http request.</returns>
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public IActionResult GetAppointment(int id)
         {
             var appointment = _service.GetAppointmentById(id);
             if(appointment == null)
@@ -65,7 +65,7 @@ namespace AppointmentsAPI.Controllers
         /// Create new Appointment.
         /// </summary>
         [HttpPost]
-        public IActionResult Create([FromBody] Appointment appointment)
+        public IActionResult CreateAppointment([FromBody] Appointment appointment)
         {
             var appointmentToCreate = _service.CreateAppointment(appointment);
             if (!ModelState.IsValid)
@@ -80,7 +80,7 @@ namespace AppointmentsAPI.Controllers
         /// </summary>
         /// <param name="id">Appointment's Id.</param>
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] Appointment appointment)
+        public IActionResult UpdateAppointment(int id, [FromBody] Appointment appointment)
         {
             if (!ModelState.IsValid)
             {
@@ -94,7 +94,7 @@ namespace AppointmentsAPI.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult DeleteAppointment(int id)
         {
             try
             {
@@ -111,7 +111,7 @@ namespace AppointmentsAPI.Controllers
         /// </summary>
         /// <param name="id">AppointmentBill's Id.</param>
         /// <returns>Result of Http request.</returns>
-        [HttpGet("biils/{id}")]
+        [HttpGet("{id}/bills")]
         public IActionResult GetBill(int id)
         {
             var appointment = _service.GetAppointmentBillById(id);
@@ -122,6 +122,10 @@ namespace AppointmentsAPI.Controllers
             return Ok(appointment);
         }
 
+        /// <summary>
+        /// Get all Bills.
+        /// </summary>
+        /// <returns>Result of Http request.</returns>
         [HttpGet("/bills")]
         public IActionResult GetAllBills()
         {
@@ -132,5 +136,81 @@ namespace AppointmentsAPI.Controllers
             }
             return Ok(appointments);
         }
+
+        /// <summary>
+        /// Create new AppointmentBill
+        /// </summary>
+        [HttpPost("bills")]
+        public IActionResult CreateBill([FromBody] AppointmentBill appointmentBill)
+        {
+            var appointmentToCreate = _service.CreateAppointmentBill(appointmentBill);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Wrong AppointmentBill Input");
+            }
+            return Ok(appointmentToCreate);
+        }
+
+        /// <summary>
+        /// Update AppointmentBill by Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill Id.</param>
+        [HttpPut("{id}/bills")]
+        public IActionResult UpdateBill(int id, [FromBody] AppointmentBill appointmentBill)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Wrong AppointmentBill Input");
+            }
+            return Ok(_service.UpdateAppoitmentBill(id, appointmentBill));
+        }
+
+        /// <summary>
+        /// Delete AppointmentBill By Id.
+        /// </summary>
+        /// <param name="id">ID.</param>
+        [HttpDelete("{id}/bills")]
+        public IActionResult DeleteBill(int id)
+        {
+            try
+            {
+                return Ok(_service.DeleteAppoitmentBill(id));
+            }
+            catch (NullReferenceException)
+            {
+                return NotFound("No Appointment with such Id");
+            }
+        }
+
+        /// <summary>
+        /// Get all Patient Appointments.
+        /// </summary>
+        /// <returns>Result of Http request.</returns>
+        [HttpGet("pattient/{id}")]
+        public IActionResult GetAllPattientAppointment(int id)
+        {
+            var appointments = _service.GetAllPatientAppointments(id);
+            if (appointments == null)
+            {
+                return NotFound("No Patient Appointment with such Id");
+            }
+            return Ok(appointments);
+        }
+
+        /// <summary>
+        /// Get all Patient Appointments.
+        /// </summary>
+        /// <returns>Result of Http request.</returns>
+        [HttpGet("bills/pattient/{id}")]
+        public IActionResult GetAllPattientAppointmentBills(int id)
+        {
+            var appointmentBills = _service.GetAllPatientAppointmentBills(id);
+            if (appointmentBills == null)
+            {
+                return NotFound("No Patient Bills with such Id");
+            }
+            return Ok(appointmentBills);
+        }
+
     }
 }

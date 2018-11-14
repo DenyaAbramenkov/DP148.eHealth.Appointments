@@ -72,7 +72,7 @@ namespace BusinessLogicLayer.Services
         public Appointment DeleteAppoitment(int id)
         {
             Appointment appointmentToDelete = _appointmentRepositiry.GetById(id);
-            appointmentToDelete.IsDeleted = true;
+            _appointmentRepositiry.GetById(id).IsDeleted = true;
             return appointmentToDelete;
         }
 
@@ -153,5 +153,42 @@ namespace BusinessLogicLayer.Services
         }
 
         #endregion
+
+        /// <summary>
+        /// Get all Appointments of the Patient.
+        /// </summary>
+        /// <param name="id">Patient Id.</param>
+        /// <returns>Set of Appointments</returns>
+        public IEnumerable<Appointment> GetAllPatientAppointments(int id)
+        {
+            List<Appointment> appointments = new List<Appointment>();
+            foreach (Appointment appointment in _appointmentRepositiry.GetAll())
+            {
+                if (appointment.IsDeleted == false && appointment.PatientId == id)
+                {
+                    appointments.Add(appointment);
+                }
+            }
+            return appointments;
+        }
+
+        /// <summary>
+        /// Get all AppointmentBills of the Patient.
+        /// </summary>
+        /// <param name="id">Patient Id.</param>
+        /// <returns>Set of AppointmentBills</returns>
+        public IEnumerable<AppointmentBill> GetAllPatientAppointmentBills(int id)
+        {
+            List<AppointmentBill> appointmentBills = new List<AppointmentBill>();
+            foreach (AppointmentBill appointmentBill in _appointmentBillRepository.GetAll())
+            {
+                if (appointmentBill.IsDeleted == false &&
+                    _appointmentRepositiry.GetById(appointmentBill.AppointmentId).PatientId == id)
+                {
+                    appointmentBills.Add(appointmentBill);
+                }
+            }
+            return appointmentBills;
+        }
     }
 }

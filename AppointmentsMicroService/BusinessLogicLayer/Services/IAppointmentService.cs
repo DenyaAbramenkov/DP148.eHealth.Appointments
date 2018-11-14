@@ -76,5 +76,19 @@ namespace BusinessLogicLayer.Services
         /// <param name="appointment">new Appointment's Info.</param>
         AppointmentBill UpdateAppoitmentBill(int id, AppointmentBill appointment);
         #endregion
+
+        /// <summary>
+        /// Get all Appointments of the Patient.
+        /// </summary>
+        /// <param name="id">Patient Id.</param>
+        /// <returns>Set of Appointments</returns>
+        IEnumerable<Appointment> GetAllPatientAppointments(int id);
+
+        /// <summary>
+        /// Get all AppointmentBills of the Patient.
+        /// </summary>
+        /// <param name="id">Patient Id.</param>
+        /// <returns>Set of AppointmentBills</returns>
+        IEnumerable<AppointmentBill> GetAllPatientAppointmentBills(int id);
     }
 }
