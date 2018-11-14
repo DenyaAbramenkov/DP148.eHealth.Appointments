@@ -37,6 +37,7 @@ namespace AppointmentsAPI
                 });
             });
             services.AddScoped<IGenericRepository<Appointment>, GenericRepository<Appointment>>();
+            services.AddScoped<IGenericRepository<AppointmentBill>, GenericRepository<AppointmentBill>>();
             services.AddTransient<IAppointmentService, AppointmentService>();
             string connection = @"Data Source=DESKTOP-689S6T3\SERVER;Initial Catalog=EHospital;Integrated Security=True";
             services.AddDbContext<EHospitalContext>(options => options.UseSqlServer(connection));

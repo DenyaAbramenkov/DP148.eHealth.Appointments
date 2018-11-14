@@ -11,7 +11,6 @@ namespace DataAccessLayer.Entityes
         /// <summary>
         /// Appointment's Id.
         /// </summary>
-        [Key]
         public int AppointmentId { get; set; }
 
         /// <summary>
@@ -37,6 +36,6 @@ namespace DataAccessLayer.Entityes
         /// <summary>
         /// Appointment of this Bill.
         /// </summary>
-        //public Appointment Appointment { get; set; }
+        public Appointment Appointment { get; set; }
     }
 }

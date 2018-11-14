@@ -54,11 +54,11 @@ namespace DataAccessLayer.AppointmentContext
 
                 entity.Property(e => e.InvoiceNumber).HasDefaultValueSql("(newid())");
 
-                //entity.HasOne(d => d.Appointment)
-                //    .WithOne(p => p.AppointmentBills)
-                //    .HasForeignKey<AppointmentBill>(d => d.AppointmentId)
-                //    .OnDelete(DeleteBehavior.ClientSetNull)
-                //    .HasConstraintName("FK_AppointmentBills_Appointments");
+                entity.HasOne(d => d.Appointment)
+                    .WithOne(p => p.AppointmentBill)
+                    .HasForeignKey<AppointmentBill>(d => d.AppointmentId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_AppointmentBills_Appointments");
             });
 
             modelBuilder.Entity<Appointment>(entity =>

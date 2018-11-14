@@ -8,6 +8,7 @@ namespace BusinessLogicLayer.Services
     /// </summary>
     public interface IAppointmentService
     {
+        #region Appointment region
         /// <summary>
         /// Get all Appointment's.
         /// </summary>
@@ -39,5 +40,41 @@ namespace BusinessLogicLayer.Services
         /// <param name="id">Appointment's Id.</param>
         /// <param name="appointment">new Appointment's Info.</param>
         Appointment UpdateAppoitment(int id, Appointment appointment);
+
+        #endregion
+
+        #region AppointmentBiil
+        /// <summary>
+        /// Get all AppointmentBill's.
+        /// </summary>
+        /// <returns>Set of AppointmentBills.</returns>
+        IEnumerable<AppointmentBill> GetAllAppointmentBills();
+
+        /// <summary>
+        /// Get AppointmentBill By Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        /// <returns>Chosen Appointment.</returns>
+        AppointmentBill GetAppointmentBillById(int id);
+
+        /// <summary>
+        /// Create new AppointmentBill.
+        /// </summary>
+        /// <param name="appointment"></param>
+        AppointmentBill CreateAppointmentBill(AppointmentBill appointment);
+
+        /// <summary>
+        /// Delete AppointmentBill by Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        AppointmentBill DeleteAppoitmentBill(int id);
+
+        /// <summary>
+        /// Update AppointmentBill by Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        /// <param name="appointment">new Appointment's Info.</param>
+        AppointmentBill UpdateAppoitmentBill(int id, AppointmentBill appointment);
+        #endregion
     }
 }

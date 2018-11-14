@@ -51,5 +51,7 @@ namespace DataAccessLayer.Entityes
         /// SoftDeleted Mechanism.
         /// </summary>
         public bool IsDeleted { get; set; }
+
+        public AppointmentBill AppointmentBill { get; set; }
     }
 }

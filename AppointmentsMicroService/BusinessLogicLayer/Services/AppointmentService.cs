@@ -10,26 +10,38 @@ namespace BusinessLogicLayer.Services
     public class AppointmentService : IAppointmentService
     {
         /// <summary>
-        /// Repository from DAL.
+        /// Repositories from DAL.
         /// </summary>
         readonly IGenericRepository<Appointment> _appointmentRepositiry;
+        readonly IGenericRepository<AppointmentBill> _appointmentBillRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AppointmentService(IGenericRepository{T})"/> class.
         /// </summary>
         /// <param name="appointmenRepository">Appointmen's repository.</param>
-        public AppointmentService(IGenericRepository<Appointment> appointmenRepository)
+        public AppointmentService(IGenericRepository<Appointment> appointmenRepository,
+                                  IGenericRepository<AppointmentBill> appointmentBillRepository)
         {
             _appointmentRepositiry = appointmenRepository;
+            _appointmentBillRepository = appointmentBillRepository;
         }
 
+        #region Appointment
         /// <summary>
         /// Get all Appointment's.
         /// </summary>
         /// <returns>Set of Appointments.</returns>
         public IEnumerable<Appointment> GetAllAppointments()
         {
-            return _appointmentRepositiry.GetAll();
+            List<Appointment> appointments = new List<Appointment>();
+            foreach (Appointment appointment in _appointmentRepositiry.GetAll())
+            {
+                if (appointment.IsDeleted == false)
+                {
+                    appointments.Add(appointment);
+                }
+            }
+            return appointments;
         }
 
         /// <summary>
@@ -60,7 +72,7 @@ namespace BusinessLogicLayer.Services
         public Appointment DeleteAppoitment(int id)
         {
             Appointment appointmentToDelete = _appointmentRepositiry.GetById(id);
-            _appointmentRepositiry.Delete(appointmentToDelete);
+            appointmentToDelete.IsDeleted = true;
             return appointmentToDelete;
         }
 
@@ -75,5 +87,71 @@ namespace BusinessLogicLayer.Services
             appointmentToUpdate = _appointmentRepositiry.Update(appointment);
             return appointmentToUpdate;
         }
+        #endregion
+
+        #region AppointmentBill
+
+        /// <summary>
+        /// Get all AppointmentBills.
+        /// </summary>
+        /// <returns>Set of Appointments.</returns>
+        public IEnumerable<AppointmentBill> GetAllAppointmentBills()
+        {
+            List<AppointmentBill> appointmentBills = new List<AppointmentBill>();
+            foreach (AppointmentBill appointmentBill in _appointmentBillRepository.GetAll())
+            {
+                if (appointmentBill.IsDeleted == false)
+                {
+                    appointmentBills.Add(appointmentBill);
+                }
+            }
+            return appointmentBills;
+        }
+
+        /// <summary>
+        /// Get AppointmentBill By Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        /// <returns>Chosen AppointmentBill.</returns>
+        public AppointmentBill GetAppointmentBillById(int id)
+        {
+            AppointmentBill appointmentBill = _appointmentBillRepository.GetById(id);
+            return appointmentBill;
+        }
+
+        /// <summary>
+        /// Create new AppointmentBill.
+        /// </summary>
+        /// <param name="appointmentBill"></param>
+        public AppointmentBill CreateAppointmentBill(AppointmentBill appointmentBill)
+        {
+            _appointmentBillRepository.Create(appointmentBill);
+            return appointmentBill;
+        }
+
+        /// <summary>
+        /// Delete AppointmentBill by Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        public AppointmentBill DeleteAppoitmentBill(int id)
+        {
+            AppointmentBill appointmentBillToDelete = _appointmentBillRepository.GetById(id);
+            appointmentBillToDelete.IsDeleted = true;
+            return appointmentBillToDelete;
+        }
+
+        /// <summary>
+        /// Update AppointmentBill by Id.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        /// <param name="appointment">new Appointment's Info.</param>
+        public AppointmentBill UpdateAppoitmentBill(int id, AppointmentBill appointmentBill)
+        {
+            AppointmentBill appointmentBillToUpdate = _appointmentBillRepository.GetById(id);
+            appointmentBillToUpdate = _appointmentBillRepository.Update(appointmentBill);
+            return appointmentBillToUpdate;
+        }
+
+        #endregion
     }
 }

@@ -105,5 +105,32 @@ namespace AppointmentsAPI.Controllers
                 return NotFound("No Appointment with such Id");
             }
         }
+
+        /// <summary>
+        /// Get AppointmentBill by Id of Appointment.
+        /// </summary>
+        /// <param name="id">AppointmentBill's Id.</param>
+        /// <returns>Result of Http request.</returns>
+        [HttpGet("biils/{id}")]
+        public IActionResult GetBill(int id)
+        {
+            var appointment = _service.GetAppointmentBillById(id);
+            if (appointment == null)
+            {
+                return NotFound("No AppointmentBill with such Id");
+            }
+            return Ok(appointment);
+        }
+
+        [HttpGet("/bills")]
+        public IActionResult GetAllBills()
+        {
+            var appointments = _service.GetAllAppointmentBills();
+            if (appointments == null)
+            {
+                return NotFound("No AppointmentBill with such Id");
+            }
+            return Ok(appointments);
+        }
     }
 }

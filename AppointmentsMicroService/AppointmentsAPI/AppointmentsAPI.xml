@@ -50,5 +50,30 @@
             </summary>
             <param name="id"></param>
         </member>
+        <member name="M:AppointmentsAPI.Controllers.AppointmentsController.GetBill(System.Int32)">
+            <summary>
+            Get AppointmentBill by Id of Appointment.
+            </summary>
+            <param name="id">AppointmentBill's Id.</param>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="F:AppointmentsAPI.Controllers.BillsController._service">
+            <summary>
+            Service for Appointments.
+            </summary>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.BillsController.#ctor(BusinessLogicLayer.Services.IAppointmentService)">
+            <summary>
+            Initializes a new instance of the <see cref="M:AppointmentsAPI.Controllers.AppointmentsController.#ctor(BusinessLogicLayer.Services.IAppointmentService)"/> class.
+            </summary>
+            <param name="service">Service.</param>
+        </member>
+        <member name="M:AppointmentsAPI.Controllers.BillsController.GetBill(System.Int32)">
+            <summary>
+            Get AppointmentBill by Id of Appointment.
+            </summary>
+            <param name="id">AppointmentBill's Id.</param>
+            <returns>Result of Http request.</returns>
+        </member>
     </members>
 </doc>
