@@ -74,11 +74,10 @@ namespace EHospital.Appointments.BusinessLogic.Services
         public AppointmentBill UpdateAppoitmentBill(int id, AppointmentBill appointmentBill)
         {
             AppointmentBill appointmentBillToUpdate = _appointmentBillRepository.GetById(id).Result;
-            appointmentBillToUpdate.Id = appointmentBill.Id;
-            appointmentBillToUpdate.InvoiceNumber = appointmentBill.InvoiceNumber;
             appointmentBillToUpdate.InvoiceNumber = appointmentBill.InvoiceNumber;
             appointmentBillToUpdate.Amount = appointmentBill.Amount;
-            appointmentBillToUpdate = _appointmentBillRepository.Update(appointmentBill);
+            _appointmentBillRepository.Update(appointmentBill);
+            _appointmentBillRepository.SaveChanges();
             return appointmentBillToUpdate;
         }
 

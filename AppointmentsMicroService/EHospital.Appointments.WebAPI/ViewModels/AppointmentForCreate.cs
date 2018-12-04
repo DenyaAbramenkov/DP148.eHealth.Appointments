@@ -26,5 +26,8 @@ namespace EHospital.Appointments.WebApi.ViewModels
         /// Duration of Appointment.
         /// </summary>
         public int Duration { get; set; }
+
+
+        public string Purpose { get; set; }
     }
 }

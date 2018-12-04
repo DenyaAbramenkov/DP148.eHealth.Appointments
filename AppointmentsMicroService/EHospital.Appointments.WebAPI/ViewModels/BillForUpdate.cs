@@ -5,18 +5,8 @@ using System.Threading.Tasks;
 
 namespace EHospital.Appointments.WebApi.ViewModels
 {
-    public class BillView
+    public class BillForUpdate
     {
-        /// <summary>
-        /// Appointmen's Id.
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
-        /// Unic InvoiceNumber
-        /// </summary>
-        public Guid InvoiceNumber { get; set; }
-
         /// <summary>
         /// Amount of money for Appointment.
         /// </summary>

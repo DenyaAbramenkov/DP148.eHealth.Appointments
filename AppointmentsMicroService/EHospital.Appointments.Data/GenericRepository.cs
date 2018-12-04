@@ -84,7 +84,6 @@ namespace EHospital.Appointments.Data
             }
             entities.Attach(entity);
             context.Entry(entity).State = EntityState.Modified;
-            context.SaveChanges();
             return entity;
         }
 

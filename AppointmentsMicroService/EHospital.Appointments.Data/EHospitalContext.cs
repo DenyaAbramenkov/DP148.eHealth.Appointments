@@ -48,7 +48,7 @@ namespace EHospital.Appointments.Data
                     .HasName("UC_InvoiceNumber")
                     .IsUnique();
 
-                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.HasIndex(u => u.Id).IsUnique();
 
                 entity.Property(e => e.Amount).HasColumnType("smallmoney");
 
@@ -63,7 +63,7 @@ namespace EHospital.Appointments.Data
 
             modelBuilder.Entity<Appointment>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.Id) ;
 
                 entity.Property(e => e.AppointmentDateTime).HasColumnType("datetime");
 

@@ -40,14 +40,14 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBill(int id)
         {
-            var appointment = await _service.GetAppointmentBillById(id);
+            var appointmentBill = await _service.GetAppointmentBillById(id);
             log.Info("Getting Appointment's Bill by Id");
-            if (appointment == null)
+            if (appointmentBill == null)
             {
                 log.Warn("Failed to get Bill");
                 return NotFound("No AppointmentBill with such Id");
             }
-            return Ok(Mapper.Map<BillView>(appointment));
+            return Ok(Mapper.Map<BillView>(appointmentBill));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed to get bills");
                 return NotFound("No AppointmentBill with such Id");
             }
-            return Ok(Mapper.Map<BillView>(appointmentBills));
+            return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed to create new bill");
                 return BadRequest("Wrong AppointmentBill Input");
             }
-            return Ok(appointmentBillToCreate);
+            return Ok(Mapper.Map<BillView>(appointmentBillToCreate));
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace EHospital.Appointments.WebApi.Controllers
         /// </summary>
         /// <param name="id">AppointmentBill Id.</param>
         [HttpPut("{id}")]
-        public IActionResult UpdateBill(int id, [FromBody] BillForCreate appointmentBill)
+        public IActionResult UpdateBill(int id, [FromBody] BillForUpdate appointmentBill)
         {
             log.Info("Updating Bill");
             if (!ModelState.IsValid)
@@ -96,7 +96,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed To update Bill");
                 return BadRequest("Wrong AppointmentBill Input");
             }
-            return Ok(_service.UpdateAppoitmentBill(id, Mapper.Map<AppointmentBill>(appointmentBill)));
+            return Ok(Mapper.Map<BillView>(_service.UpdateAppoitmentBill(id, Mapper.Map<AppointmentBill>(appointmentBill))));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace EHospital.Appointments.WebApi.Controllers
             log.Info("Deleting Bill");
             try
             {
-                return Ok(_service.DeleteAppoitmentBill(id));
+                return Ok(Mapper.Map<BillView>(_service.DeleteAppoitmentBill(id)));
             }
             catch (NullReferenceException)
             {
@@ -132,7 +132,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed To get pattient's bills");
                 return NotFound("No Patient Bills with such Id");
             }
-            return Ok(Mapper.Map<BillView>(appointmentBills));
+            return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
         }
     }
 }

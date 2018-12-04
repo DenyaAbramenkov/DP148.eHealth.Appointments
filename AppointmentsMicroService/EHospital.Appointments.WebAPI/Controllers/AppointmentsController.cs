@@ -67,7 +67,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed to get appointment by Id");
                 return NotFound("No Appointment with such Id");
             }
-            return Ok(Mapper.Map<Appointment>(appointment));
+            return Ok(Mapper.Map<AppointmentView>(appointment));
         }
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed to create");
                 return BadRequest("Wrong AppointmentInput");
             }
-            return Ok(appointmentToCreate);
+            return Ok(Mapper.Map<AppointmentView>(appointmentToCreate));
         } 
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("Failed to Update");
                 return BadRequest("Wrong Appointment Input");
             }
-            return Ok(_service.UpdateAppoitment(id, Mapper.Map<Appointment>(appointment)));
+            return Ok(Mapper.Map<AppointmentView>(_service.UpdateAppoitment(id, Mapper.Map<Appointment>(appointment))));
         }
 
         /// <summary>
@@ -135,7 +135,7 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("No appointment was found");
                 return NotFound("No Patient Appointment with such Id");
             }
-            return Ok(Mapper.Map<AppointmentView>(appointments));
+            return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
         }
     }
 }

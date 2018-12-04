@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EHospital.Appointments.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:EHospital.Appointments.WebApi.AutoMapperConfig.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:EHospital.Appointments.WebApi.AutoMapperConfig"/> class.
+            </summary>
+        </member>
+        <member name="F:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController._service">
+            <summary>
+            Service for Appointments.
+            </summary>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.#ctor(EHospital.Appointments.BusinessLogic.Contracts.IAppointmentBillService)">
+            <summary>
+            Initializes a new instance of the <see cref="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.#ctor(EHospital.Appointments.BusinessLogic.Contracts.IAppointmentBillService)"/> class.
+            </summary>
+            <param name="service">Service.</param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.GetBill(System.Int32)">
+            <summary>
+            Get AppointmentBill by Id of Appointment.
+            </summary>
+            <param name="id">AppointmentBill's Id.</param>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.GetAllBills">
+            <summary>
+            Get all Bills.
+            </summary>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.CreateBill(EHospital.Appointments.WebApi.ViewModels.BillForCreate)">
+            <summary>
+            Create new AppointmentBill
+            </summary>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.UpdateBill(System.Int32,EHospital.Appointments.WebApi.ViewModels.BillForUpdate)">
+            <summary>
+            Update AppointmentBill by Id.
+            </summary>
+            <param name="id">AppointmentBill Id.</param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.DeleteBill(System.Int32)">
+            <summary>
+            Delete AppointmentBill By Id.
+            </summary>
+            <param name="id">ID.</param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentBillsController.GetAllPattientAppointmentBills(System.Int32)">
+            <summary>
+            Get all Patient Appointments.
+            </summary>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="T:EHospital.Appointments.WebApi.Controllers.AppointmentsController">
+            <summary>
+            Contoller for Appointments Query.
+            </summary>
+        </member>
+        <member name="F:EHospital.Appointments.WebApi.Controllers.AppointmentsController._service">
+            <summary>
+            Service for Appointments.
+            </summary>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.#ctor(EHospital.Appointments.BusinessLogic.Contracts.IAppointmentService)">
+            <summary>
+            Initializes a new instance of the <see cref="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.#ctor(EHospital.Appointments.BusinessLogic.Contracts.IAppointmentService)"/> class.
+            </summary>
+            <param name="service">Service.</param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.GetAllAppointment">
+            <summary>
+            Get all Appointments
+            </summary>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.GetAppointment(System.Int32)">
+            <summary>
+            Get Appointment by Id.
+            </summary>
+            <param name="id">Appointment's Id.</param>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.CreateAppointment(EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate)">
+            <summary>
+            Create new Appointment.
+            </summary>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.UpdateAppointment(System.Int32,EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate)">
+            <summary>
+            Update Appointment by Id.
+            </summary>
+            <param name="id">Appointment's Id.</param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.DeleteAppointment(System.Int32)">
+            <summary>
+            Delete Appointment's By Id.
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:EHospital.Appointments.WebApi.Controllers.AppointmentsController.GetAllPattientAppointment(System.Int32)">
+            <summary>
+            Get all Patient Appointments.
+            </summary>
+            <returns>Result of Http request.</returns>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate.PatientId">
+            <summary>
+            Pattient's Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate.UserId">
+            <summary>
+            Doctor/nurse Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate.AppointmentDateTime">
+            <summary>
+            Data and Time of Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentForCreate.Duration">
+            <summary>
+            Duration of Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.Id">
+            <summary>
+            Appointmen's Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.PatientId">
+            <summary>
+            Pattient's Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.UserId">
+            <summary>
+            Doctor/nurse Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.AppointmentDateTime">
+            <summary>
+            Data and Time of Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.Duration">
+            <summary>
+            Duration of Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.AppointmentView.Purpose">
+            <summary>
+            Purpose for Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillForCreate.Id">
+            <summary>
+            Appointment's Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillForCreate.Amount">
+            <summary>
+            Amount of money for Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillForCreate.IsCompleted">
+            <summary>
+            Is Bill completed.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillForUpdate.Amount">
+            <summary>
+            Amount of money for Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillForUpdate.IsCompleted">
+            <summary>
+            Is Bill completed.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillView.Id">
+            <summary>
+            Appointmen's Id.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillView.InvoiceNumber">
+            <summary>
+            Unic InvoiceNumber
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillView.Amount">
+            <summary>
+            Amount of money for Appointment.
+            </summary>
+        </member>
+        <member name="P:EHospital.Appointments.WebApi.ViewModels.BillView.IsCompleted">
+            <summary>
+            Is Bill completed.
+            </summary>
+        </member>
+    </members>
+</doc>

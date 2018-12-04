@@ -14,6 +14,8 @@ using EHospital.Appointments.BusinessLogic.Contracts;
 using EHospital.Appointments.Data;
 using AutoMapper;
 using EHospital.Appointments.WebApi;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Cors.Internal;
 
 namespace AppointmentsAPI
 {
@@ -44,6 +46,16 @@ namespace AppointmentsAPI
             services.AddTransient<IAppointmentBillService, AppointmentBillService>();
             services.AddDbContext<EHospitalContext>(options => options.UseSqlServer(Configuration.GetConnectionString("EHospitalDB")));
             Mapper.Initialize(cfg => cfg.AddProfile<AutoMapperConfig>());
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
+            });
+            services.Configure<MvcOptions>(options =>
+            {
+                options.Filters.Add(new CorsAuthorizationFilterFactory("CorsPolicy"));
+            });
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -52,7 +64,7 @@ namespace AppointmentsAPI
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API");
+                c.SwaggerEndpoint("../swagger/v1/swagger.json", "eHospital");
             });
             if (env.IsDevelopment())
             {
@@ -63,6 +75,8 @@ namespace AppointmentsAPI
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
+
         }
     }
 }

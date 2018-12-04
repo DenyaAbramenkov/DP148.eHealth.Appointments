@@ -74,14 +74,13 @@ namespace EHospital.Appointments.BusinessLogic.Services
         public Appointment UpdateAppoitment(int id, Appointment appointment)
         {
             Appointment appointmentToUpdate = _appointmentRepositiry.GetById(id).Result;
-            appointmentToUpdate.Id = appointment.Id;
             appointmentToUpdate.PatientId = appointment.PatientId;
             appointmentToUpdate.UserId = appointment.UserId;
             appointmentToUpdate.AppointmentDateTime = appointment.AppointmentDateTime;
             appointmentToUpdate.Purpose = appointment.Purpose;
             appointmentToUpdate.Duration = appointment.Duration;
-            appointmentToUpdate.AppointmentBill = appointment.AppointmentBill;
             _appointmentRepositiry.Update(appointmentToUpdate);
+            _appointmentRepositiry.SaveChanges();
             return appointmentToUpdate;
         }
 
