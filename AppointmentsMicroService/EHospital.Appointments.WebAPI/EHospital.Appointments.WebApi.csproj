@@ -6,11 +6,19 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningLevel>2</WarningLevel>
-    <DocumentationFile>C:\Users\den_a\Desktop\AppointmentsServices\DP148.eHealth.Appointments\AppointmentsMicroService\AppointmentsAPI\AppointmentsAPI.xml</DocumentationFile>
+    <DocumentationFile></DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Content Remove="AllApointment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Rotativa\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\AllAppointment.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,7 +28,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="2.2.6" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.1.1" />
+    <PackageReference Include="Select.HtmlToPdf" Version="18.4.0" />
+    <PackageReference Include="Select.Pdf.NetCore" Version="18.4.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+    <PackageReference Include="wkhtmltopdf.x64" Version="0.12.5" />
   </ItemGroup>
 
   <ItemGroup>

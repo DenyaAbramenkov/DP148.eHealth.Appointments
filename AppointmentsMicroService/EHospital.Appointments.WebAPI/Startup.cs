@@ -16,6 +16,7 @@ using AutoMapper;
 using EHospital.Appointments.WebApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
+using Rotativa.AspNetCore;
 
 namespace AppointmentsAPI
 {
@@ -76,7 +77,7 @@ namespace AppointmentsAPI
             }
             app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
-
+            RotativaConfiguration.Setup(env);
         }
     }
 }

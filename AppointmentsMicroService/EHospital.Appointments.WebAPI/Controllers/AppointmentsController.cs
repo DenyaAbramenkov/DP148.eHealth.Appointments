@@ -8,6 +8,9 @@ using EHospital.Appointments.BusinessLogic.Contracts;
 using EHospital.Appointments.Model;
 using EHospital.Appointments.WebApi.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Rotativa.AspNetCore;
+using Rotativa.AspNetCore.Options;
+using SelectPdf;
 
 namespace EHospital.Appointments.WebApi.Controllers
 {
@@ -49,9 +52,10 @@ namespace EHospital.Appointments.WebApi.Controllers
                 log.Warn("No Appointments Found");
                 return NotFound("No Appointments Found");
             }
-            return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+            return new ViewAsPdf("AllAppointment", Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+            //return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
         }
-
+        
         /// <summary>
         /// Get Appointment by Id.
         /// </summary>
@@ -137,5 +141,9 @@ namespace EHospital.Appointments.WebApi.Controllers
             }
             return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
         }
+
+        
     }
+
+
 }

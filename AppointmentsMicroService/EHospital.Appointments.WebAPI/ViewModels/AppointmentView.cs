@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EHospital.Appointments.WebApi.ViewModels
 {
-    class AppointmentView
+    public class AppointmentView
     {
         /// <summary>
         /// Appointmen's Id.

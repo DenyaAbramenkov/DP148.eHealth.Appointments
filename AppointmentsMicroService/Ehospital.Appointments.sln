@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Model", "EHospital.Appointments.Model\EHospital.Appointments.Model.csproj", "{09450978-E82C-4FEF-9F02-1BFF6DA212F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHospital.Appointments.Test", "EHospital.Appointments.Test\EHospital.Appointments.Test.csproj", "{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Test", "EHospital.Appointments.Test\EHospital.Appointments.Test.csproj", "{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
