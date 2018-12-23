@@ -6,7 +6,9 @@ using AutoMapper;
 using EHospital.Appointments.BusinessLogic.Contracts;
 using EHospital.Appointments.Model;
 using EHospital.Appointments.WebApi.ViewModels;
+using EHospital.Shared.HttpClientWrapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EHospital.Appointments.WebApi.Controllers
@@ -15,8 +17,10 @@ namespace EHospital.Appointments.WebApi.Controllers
     [ApiController]
     public class AppointmentBillsController : ControllerBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager
-                                                          .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private const string LOG_URI_ERROR = "https://localhost:50935/api/Logging/error";
+        private const string LOG_MESSAGE = "Unexpected internal error!";
+
+        private readonly IHttpClientWrapper _httpClientWrapper;
 
         /// <summary>
         /// Service for Appointments.
@@ -40,14 +44,28 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBill(int id)
         {
-            var appointmentBill = await _service.GetAppointmentBillById(id);
-            log.Info("Getting Appointment's Bill by Id");
-            if (appointmentBill == null)
+            try
             {
-                log.Warn("Failed to get Bill");
-                return NotFound("No AppointmentBill with such Id");
+                var appointmentBill = await _service.GetAppointmentBillById(id);
+                if (appointmentBill == null)
+                {
+                    return NotFound("No AppointmentBill with such Id");
+                }
+                return Ok(Mapper.Map<BillView>(appointmentBill));
             }
-            return Ok(Mapper.Map<BillView>(appointmentBill));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
 
         /// <summary>
@@ -57,30 +75,60 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllBills()
         {
-            var appointmentBills = await _service.GetAllAppointmentBills();
-            log.Info("Getting all bills");
-            if (appointmentBills == null)
+            try
             {
-                log.Warn("Failed to get bills");
-                return NotFound("No AppointmentBill with such Id");
+                var appointmentBills = await _service.GetAllAppointmentBills();
+                if (appointmentBills == null)
+                {
+
+                    return NotFound("No AppointmentBill with such Id");
+                }
+                return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
             }
-            return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
 
         /// <summary>
         /// Create new AppointmentBill
         /// </summary>
         [HttpPost]
-        public IActionResult CreateBill([FromBody] BillForCreate appointmentBill)
+        public async Task<IActionResult> CreateBill([FromBody] BillForCreate appointmentBill)
         {
-            var appointmentBillToCreate = _service.CreateAppointmentBill(Mapper.Map<AppointmentBill>(appointmentBill));
-            log.Info("Creating new Bill");
-            if (!ModelState.IsValid)
+            try
             {
-                log.Warn("Failed to create new bill");
-                return BadRequest("Wrong AppointmentBill Input");
+                var appointmentBillToCreate = _service.CreateAppointmentBill(Mapper.Map<AppointmentBill>(appointmentBill));
+                if (!ModelState.IsValid)
+                {
+
+                    return BadRequest("Wrong AppointmentBill Input");
+                }
+                return Ok(Mapper.Map<BillView>(appointmentBillToCreate));
             }
-            return Ok(Mapper.Map<BillView>(appointmentBillToCreate));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
 
         /// <summary>
@@ -88,15 +136,30 @@ namespace EHospital.Appointments.WebApi.Controllers
         /// </summary>
         /// <param name="id">AppointmentBill Id.</param>
         [HttpPut("{id}")]
-        public IActionResult UpdateBill(int id, [FromBody] BillForUpdate appointmentBill)
+        public async Task<IActionResult> UpdateBill(int id, [FromBody] BillForUpdate appointmentBill)
         {
-            log.Info("Updating Bill");
-            if (!ModelState.IsValid)
+            try
             {
-                log.Warn("Failed To update Bill");
-                return BadRequest("Wrong AppointmentBill Input");
+                if (!ModelState.IsValid)
+                {
+
+                    return BadRequest("Wrong AppointmentBill Input");
+                }
+                return Ok(Mapper.Map<BillView>(_service.UpdateAppoitmentBill(id, Mapper.Map<AppointmentBill>(appointmentBill))));
             }
-            return Ok(Mapper.Map<BillView>(_service.UpdateAppoitmentBill(id, Mapper.Map<AppointmentBill>(appointmentBill))));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
 
         /// <summary>
@@ -104,17 +167,32 @@ namespace EHospital.Appointments.WebApi.Controllers
         /// </summary>
         /// <param name="id">ID.</param>
         [HttpDelete("{id}")]
-        public IActionResult DeleteBill(int id)
+        public async Task<IActionResult> DeleteBill(int id)
         {
-            log.Info("Deleting Bill");
             try
             {
-                return Ok(Mapper.Map<BillView>(_service.DeleteAppoitmentBill(id)));
+                try
+                {
+                    return Ok(Mapper.Map<BillView>(_service.DeleteAppoitmentBill(id)));
+                }
+                catch (NullReferenceException)
+                {
+
+                    return NotFound("No Appointment with such Id");
+                }
             }
-            catch (NullReferenceException)
+
+            catch (Exception ex)
             {
-                log.Warn("Failed to delete Bill");
-                return NotFound("No Appointment with such Id");
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
             }
         }
 
@@ -125,14 +203,28 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("pattient/{id}")]
         public async Task<IActionResult> GetAllPattientAppointmentBills(int id)
         {
-            var appointmentBills = await _service.GetAllPatientAppointmentBills(id);
-            log.Info("Getting all biils of client");
-            if (appointmentBills == null)
+            try
             {
-                log.Warn("Failed To get pattient's bills");
-                return NotFound("No Patient Bills with such Id");
+                var appointmentBills = await _service.GetAllPatientAppointmentBills(id);
+                if (appointmentBills == null)
+                {
+                    return NotFound("No Patient Bills with such Id");
+                }
+                return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
             }
-            return Ok(Mapper.Map<IEnumerable<BillView>>(appointmentBills));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
     }
 }

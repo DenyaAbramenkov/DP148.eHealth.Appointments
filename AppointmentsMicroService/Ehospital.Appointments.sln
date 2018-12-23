@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Busi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Model", "EHospital.Appointments.Model\EHospital.Appointments.Model.csproj", "{09450978-E82C-4FEF-9F02-1BFF6DA212F1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EHospital.Appointments.Test", "EHospital.Appointments.Test\EHospital.Appointments.Test.csproj", "{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EHospital.Appointments.Tests", "EHospital.Appointments.Tests\EHospital.Appointments.Tests.csproj", "{5E3B5412-E874-4BD0-92DC-2216DF8ABF75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{09450978-E82C-4FEF-9F02-1BFF6DA212F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{09450978-E82C-4FEF-9F02-1BFF6DA212F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{09450978-E82C-4FEF-9F02-1BFF6DA212F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F9F2A411-F8C1-4D5F-9572-DEA0687BBEC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E3B5412-E874-4BD0-92DC-2216DF8ABF75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E3B5412-E874-4BD0-92DC-2216DF8ABF75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E3B5412-E874-4BD0-92DC-2216DF8ABF75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E3B5412-E874-4BD0-92DC-2216DF8ABF75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

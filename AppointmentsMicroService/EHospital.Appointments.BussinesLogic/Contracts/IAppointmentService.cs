@@ -32,14 +32,14 @@ namespace EHospital.Appointments.BusinessLogic.Contracts
         /// Delete Appointmetn by Id.
         /// </summary>
         /// <param name="id">Appointment's Id.</param>
-        Appointment DeleteAppoitment(int id);
+        Appointment DeleteAppointment(int id);
 
         /// <summary>
         /// Update Appointment by Id.
         /// </summary>
         /// <param name="id">Appointment's Id.</param>
         /// <param name="appointment">new Appointment's Info.</param>
-        Appointment UpdateAppoitment(int id, Appointment appointment);
+        Appointment UpdateAppointment(int id, Appointment appointment);
 
         /// <summary>
         /// Get all Appointments of the Patient.

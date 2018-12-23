@@ -7,10 +7,9 @@ using EHospital.Appointments.BusinessLogic;
 using EHospital.Appointments.BusinessLogic.Contracts;
 using EHospital.Appointments.Model;
 using EHospital.Appointments.WebApi.ViewModels;
+using EHospital.Shared.HttpClientWrapper;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Rotativa.AspNetCore;
-using Rotativa.AspNetCore.Options;
-using SelectPdf;
 
 namespace EHospital.Appointments.WebApi.Controllers
 {
@@ -21,8 +20,10 @@ namespace EHospital.Appointments.WebApi.Controllers
     [ApiController]
     public class AppointmentsController : ControllerBase
     {
-        private static readonly log4net.ILog log = log4net.LogManager
-                                                          .GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private const string LOG_URI_ERROR = "https://localhost:50935/api/Logging/error";
+        private const string LOG_MESSAGE = "Unexpected internal error!";
+
+        private readonly IHttpClientWrapper _httpClientWrapper;
 
         /// <summary>
         /// Service for Appointments.
@@ -45,17 +46,30 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAppointment()
         {
-            var appointments = await _service.GetAllAppointments();
-            log.Info("Getting All Appointments");
-            if (appointments.Count() == 0)
+            try
             {
-                log.Warn("No Appointments Found");
-                return NotFound("No Appointments Found");
+                var appointments = await _service.GetAllAppointments();
+                if (appointments.Count() == 0)
+                {
+                    return NotFound("No Appointments Found");
+                }
+                return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
             }
-            return new ViewAsPdf("AllAppointment", Mapper.Map<IEnumerable<AppointmentView>>(appointments));
-            //return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
-        
+
         /// <summary>
         /// Get Appointment by Id.
         /// </summary>
@@ -64,46 +78,89 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointment(int id)
         {
-            var appointment = await _service.GetAppointmentById(id);
-            log.Info("Getting AppointmentBy Id");
-            if(appointment == null)
+            try
             {
-                log.Warn("Failed to get appointment by Id");
-                return NotFound("No Appointment with such Id");
+                var appointment = await _service.GetAppointmentById(id);
+                if (appointment == null)
+                {
+                    return NotFound("No Appointment with such Id");
+                }
+                return Ok(Mapper.Map<AppointmentView>(appointment));
             }
-            return Ok(Mapper.Map<AppointmentView>(appointment));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
 
         /// <summary>
         /// Create new Appointment.
         /// </summary>
         [HttpPost]
-        public IActionResult CreateAppointment([FromBody] AppointmentForCreate appointment)
+        public async Task<IActionResult> CreateAppointment([FromBody] AppointmentForCreate appointment)
         {
-            var appointmentToCreate = _service.CreateAppointment(Mapper.Map<Appointment>(appointment));
-            log.Info("Creating new Appointment");
-            if (!ModelState.IsValid)
+            try
             {
-                log.Warn("Failed to create");
-                return BadRequest("Wrong AppointmentInput");
+                var appointmentToCreate = _service.CreateAppointment(Mapper.Map<Appointment>(appointment));
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Wrong AppointmentInput");
+                }
+                return Ok(Mapper.Map<AppointmentView>(appointmentToCreate));
             }
-            return Ok(Mapper.Map<AppointmentView>(appointmentToCreate));
-        } 
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
+        }
 
         /// <summary>
         /// Update Appointment by Id.
         /// </summary>
         /// <param name="id">Appointment's Id.</param>
         [HttpPut("{id}")]
-        public IActionResult UpdateAppointment(int id, [FromBody] AppointmentForCreate appointment)
+        public async Task<IActionResult> UpdateAppointment(int id, [FromBody] AppointmentForCreate appointment)
         {
-            log.Info("Updating Appointment");
-            if (!ModelState.IsValid)
+            try
             {
-                log.Warn("Failed to Update");
-                return BadRequest("Wrong Appointment Input");
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest("Wrong Appointment Input");
+                }
+                return Ok(Mapper.Map<AppointmentView>(_service.UpdateAppointment(id, Mapper.Map<Appointment>(appointment))));
             }
-            return Ok(Mapper.Map<AppointmentView>(_service.UpdateAppoitment(id, Mapper.Map<Appointment>(appointment))));
+
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
+
         }
 
         /// <summary>
@@ -111,17 +168,31 @@ namespace EHospital.Appointments.WebApi.Controllers
         /// </summary>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public IActionResult DeleteAppointment(int id)
+        public async Task<IActionResult> DeleteAppointment(int id)
         {
-            log.Info("Deleting Appointment");
             try
             {
-                return Ok(_service.DeleteAppoitment(id));
+                try
+                {
+                    return Ok(_service.DeleteAppointment(id));
+                }
+                catch (NullReferenceException)
+                {
+                    return NotFound("No Appointment with such Id");
+                }
             }
-            catch(NullReferenceException)
+
+            catch (Exception ex)
             {
-                log.Warn("FailedToDelete");
-                return NotFound("No Appointment with such Id");
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
             }
         }
 
@@ -132,18 +203,27 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("pattient/{id}")]
         public async Task<IActionResult> GetAllPattientAppointment(int id)
         {
+            try
+            { 
             var appointments = await _service.GetAllPatientAppointments(id);
-            log.Info("Getting all Pattiens Appointments");
             if (appointments == null)
             {
-                log.Warn("No appointment was found");
                 return NotFound("No Patient Appointment with such Id");
             }
             return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+            }
+            catch (Exception ex)
+            {
+                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                {
+                    Message = LOG_MESSAGE,
+                    Exception = ex,
+                    RequestType = HttpContext.Request.Method,
+                    RequestUri = HttpContext.Request.GetDisplayUrl()
+                });
+
+                return Conflict();
+            }
         }
-
-        
     }
-
-
 }
