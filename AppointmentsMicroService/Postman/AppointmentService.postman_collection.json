@@ -1,0 +1,399 @@
+{
+	"info": {
+		"_postman_id": "52f9b0f4-96dd-44ce-9711-fa43cfcbee55",
+		"name": "AppointmentService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetAllAppointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAppointmentById",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateAppointment",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "1c46d8f0-ef99-45a9-bfd5-b9989759aa3f",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"patientId\": 1,\r\n  \"userId\": 1,\r\n  \"appointmentDateTime\": \"2018-11-14T08:36:36.571Z\",\r\n  \"duration\": 5,\r\n  \"isDeleted\": false\r\n  }\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "CreateAppointment",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\"patientId\": 1,\r\n  \"userId\": 1,\r\n  \"appointmentDateTime\": \"2018-11-14T08:36:36.571Z\",\r\n  \"duration\": 50,\r\n  \"purpose\": \"inspection\",\r\n  \"isDeleted\": false,\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:44323/api/appointments",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44323",
+							"path": [
+								"api",
+								"appointments"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Server",
+							"value": "Kestrel"
+						},
+						{
+							"key": "X-SourceFiles",
+							"value": "=?UTF-8?B?QzpcVXNlcnNcZGVuX2FcRGVza3RvcFxBcHBvaW50bWVudHNTZXJ2aWNlc1xEUDE0OC5lSGVhbHRoLkFwcG9pbnRtZW50c1xBcHBvaW50bWVudHNNaWNyb1NlcnZpY2VcQXBwb2ludG1lbnRzQVBJXGFwaVxhcHBvaW50bWVudHM=?="
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "ASP.NET"
+						},
+						{
+							"key": "Date",
+							"value": "Wed, 14 Nov 2018 08:40:00 GMT"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"\": [\n        \"The input was not valid.\"\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Update Appointment",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"patientId\": 2,\r\n  \"userId\": 2,\r\n  \"duration\": 10,\r\n  \"appointmentDateTime\": \"2018-12-04T22:35:29.244Z\",\r\n  \"purpose\": \"inspection\"\r\n}"
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteAppointment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/8",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllBills",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetBillByAppointmentId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/1/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"1",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreateBill",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/7/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"7",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateBill",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/7/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"7",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteBill",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/7/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"7",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllPatientsAppointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/pattient/1",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"pattient",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllPatientBills",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44323/api/appointments/1/bills",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44323",
+					"path": [
+						"api",
+						"appointments",
+						"1",
+						"bills"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

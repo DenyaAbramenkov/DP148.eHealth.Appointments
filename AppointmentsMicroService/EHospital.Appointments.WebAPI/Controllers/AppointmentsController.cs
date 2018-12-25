@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
-using EHospital.Appointments.BusinessLogic;
 using EHospital.Appointments.BusinessLogic.Contracts;
+using EHospital.Shared.Authorization;
+using EHospital.Shared.Configuration;
+using EHospital.Shared.HttpClientWrapper;
+using EHospital.Shared.Logging;
+using EHospital.Shared.Logging.Models;
 using EHospital.Appointments.Model;
 using EHospital.Appointments.WebApi.ViewModels;
 using EHospital.Shared.HttpClientWrapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,24 +25,26 @@ namespace EHospital.Appointments.WebApi.Controllers
     [ApiController]
     public class AppointmentsController : ControllerBase
     {
-        private const string LOG_URI_ERROR = "https://localhost:50935/api/Logging/error";
-        private const string LOG_MESSAGE = "Unexpected internal error!";
-
+        private readonly IAuthDetailsProvider _authDetailsProvider;
+        private readonly ILoggingProvider _loggingProvider;
         private readonly IHttpClientWrapper _httpClientWrapper;
-
-        /// <summary>
-        /// Service for Appointments.
-        /// </summary>
         private readonly IAppointmentService _service;
+        private readonly Shared.Configuration.IConfigurationProvider _configurationProvider;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AppointmentsController(IAppointmentService)"/> class.
+        /// Initializes a new instance of the <see cref="AppointmentController(IAppointmentService)"/> class.
         /// </summary>
         /// <param name="service">Service.</param>
-        public AppointmentsController(IAppointmentService service)
+        public AppointmentsController(IAppointmentService service, ILoggingProvider loggingProvider,
+            IHttpClientWrapper httpClientWrapper, IAuthDetailsProvider authDetailsProvider, Shared.Configuration.IConfigurationProvider configurationProvider)
         {
             _service = service;
+            _authDetailsProvider = authDetailsProvider;
+            _httpClientWrapper = httpClientWrapper;
+            _loggingProvider = loggingProvider;
+            _configurationProvider = configurationProvider;
         }
+       
 
         /// <summary>
         /// Get all Appointments
@@ -46,27 +53,33 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllAppointment()
         {
-            try
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
             {
-                var appointments = await _service.GetAllAppointments();
-                if (appointments.Count() == 0)
-                {
-                    return NotFound("No Appointments Found");
-                }
-                return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+                return Unauthorized();
             }
 
-            catch (Exception ex)
-            {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+            try
                 {
-                    Message = LOG_MESSAGE,
+                    var appointments = await _service.GetAllAppointments();
+                    if (appointments.Count() == 0)
+                    {
+                        return NotFound("No Appointments Found");
+                    }
+                    return Ok(Mapper.Map<IEnumerable<AppointmentView>>(appointments));
+                }
+
+                catch (Exception ex)
+                {
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
+                {
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
         }
 
@@ -78,6 +91,12 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAppointment(int id)
         {
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var appointment = await _service.GetAppointmentById(id);
@@ -90,15 +109,15 @@ namespace EHospital.Appointments.WebApi.Controllers
 
             catch (Exception ex)
             {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
                 {
-                    Message = LOG_MESSAGE,
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
         }
 
@@ -108,6 +127,12 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateAppointment([FromBody] AppointmentForCreate appointment)
         {
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 var appointmentToCreate = _service.CreateAppointment(Mapper.Map<Appointment>(appointment));
@@ -120,15 +145,15 @@ namespace EHospital.Appointments.WebApi.Controllers
 
             catch (Exception ex)
             {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
                 {
-                    Message = LOG_MESSAGE,
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
         }
 
@@ -139,6 +164,12 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAppointment(int id, [FromBody] AppointmentForCreate appointment)
         {
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 if (!ModelState.IsValid)
@@ -150,15 +181,15 @@ namespace EHospital.Appointments.WebApi.Controllers
 
             catch (Exception ex)
             {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
                 {
-                    Message = LOG_MESSAGE,
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
 
         }
@@ -170,6 +201,12 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAppointment(int id)
         {
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
+            {
+                return Unauthorized();
+            }
+
             try
             {
                 try
@@ -184,15 +221,15 @@ namespace EHospital.Appointments.WebApi.Controllers
 
             catch (Exception ex)
             {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
                 {
-                    Message = LOG_MESSAGE,
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
         }
 
@@ -203,6 +240,12 @@ namespace EHospital.Appointments.WebApi.Controllers
         [HttpGet("pattient/{id}")]
         public async Task<IActionResult> GetAllPattientAppointment(int id)
         {
+            var authInfo = await _authDetailsProvider.GetUserAuthInfoAsync(_configurationProvider.BaseUrl, Request.Headers["Authorization"]);
+            if (authInfo == null)
+            {
+                return Unauthorized();
+            }
+
             try
             { 
             var appointments = await _service.GetAllPatientAppointments(id);
@@ -214,15 +257,15 @@ namespace EHospital.Appointments.WebApi.Controllers
             }
             catch (Exception ex)
             {
-                await _httpClientWrapper.SendPostRequest(LOG_URI_ERROR, new
+                await _loggingProvider.LogErrorMessage(_configurationProvider.BaseUrl, new LoggingMessage
                 {
-                    Message = LOG_MESSAGE,
+                    ErrorMessage = ex.Message,
                     Exception = ex,
                     RequestType = HttpContext.Request.Method,
                     RequestUri = HttpContext.Request.GetDisplayUrl()
                 });
 
-                return Conflict();
+                return BadRequest("Some error was thrown:" + ex.Message);
             }
         }
     }
