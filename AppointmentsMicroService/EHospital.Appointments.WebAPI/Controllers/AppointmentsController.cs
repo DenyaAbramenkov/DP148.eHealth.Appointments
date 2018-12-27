@@ -44,8 +44,7 @@ namespace EHospital.Appointments.WebApi.Controllers
             _loggingProvider = loggingProvider;
             _configurationProvider = configurationProvider;
         }
-       
-
+        
         /// <summary>
         /// Get all Appointments
         /// </summary>

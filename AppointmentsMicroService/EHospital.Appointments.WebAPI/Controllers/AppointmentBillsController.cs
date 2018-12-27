@@ -42,6 +42,7 @@ namespace EHospital.Appointments.WebApi.Controllers
             _configurationProvider = configurationProvider;
         }
 
+
         /// <summary>
         /// Get AppointmentBill by Id of Appointment.
         /// </summary>
